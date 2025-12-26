@@ -1,7 +1,8 @@
--- Database: my-portfolio
+-- Database: my-portfolio (Compatible with MySQL 5.7 and above)
 -- Run this script to create all required tables
+-- Using utf8mb4_general_ci collation for compatibility
 
-CREATE DATABASE IF NOT EXISTS `my-portfolio`;
+CREATE DATABASE IF NOT EXISTS `my-portfolio` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `my-portfolio`;
 
 -- Users table (for authentication)
@@ -11,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     name VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Categories table
 CREATE TABLE IF NOT EXISTS categories (
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS categories (
     icon VARCHAR(50),
     icon_color VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Skills table
 CREATE TABLE IF NOT EXISTS skills (
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS skills (
     proficiency INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Projects table
 CREATE TABLE IF NOT EXISTS projects (
@@ -53,7 +54,7 @@ CREATE TABLE IF NOT EXISTS projects (
     status ENUM('draft', 'published', 'archived') DEFAULT 'published',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Project tags (many-to-many)
 CREATE TABLE IF NOT EXISTS project_tags (
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS project_tags (
     project_id INT NOT NULL,
     tag_name VARCHAR(50) NOT NULL,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Certificates table
 CREATE TABLE IF NOT EXISTS certificates (
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS certificates (
     credential_url VARCHAR(500),
     logo_type VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Work History table
 CREATE TABLE IF NOT EXISTS work_history (
@@ -89,7 +90,7 @@ CREATE TABLE IF NOT EXISTS work_history (
     achievements JSON,
     technologies JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Profile table (single row)
 CREATE TABLE IF NOT EXISTS profile (
@@ -109,7 +110,7 @@ CREATE TABLE IF NOT EXISTS profile (
     twitter_url VARCHAR(255),
     instagram_url VARCHAR(255),
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Contact messages table
 CREATE TABLE IF NOT EXISTS contacts (
@@ -120,7 +121,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     message TEXT NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (email, password, name) VALUES
