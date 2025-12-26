@@ -1,0 +1,750 @@
+{
+	"info": {
+		"_postman_id": "my-portfolio-api",
+		"name": "My Portfolio API",
+		"description": "API collection for My Portfolio backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('token', jsonData.token);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"admin123\",\n    \"newPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/change-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "change-password"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Public",
+			"item": [
+				{
+					"name": "Get Landing Data",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/public/landing",
+							"host": ["{{baseUrl}}"],
+							"path": ["public", "landing"]
+						}
+					}
+				},
+				{
+					"name": "Get Project By Slug",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/public/project/siloker",
+							"host": ["{{baseUrl}}"],
+							"path": ["public", "project", "siloker"]
+						}
+					}
+				},
+				{
+					"name": "Submit Contact Form",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"subject\": \"Project Inquiry\",\n    \"message\": \"Hi, I would like to discuss a project.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/public/contact",
+							"host": ["{{baseUrl}}"],
+							"path": ["public", "contact"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dashboard/stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["dashboard", "stats"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["profile"]
+						}
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Deni Suryadi\",\n    \"title\": \"Fullstack Developer\",\n    \"bio\": \"Passionate developer with expertise in web development\",\n    \"short_bio\": \"Building awesome web applications\",\n    \"email\": \"deni@example.com\",\n    \"phone\": \"+62 812-3456-7890\",\n    \"location\": \"Jakarta, Indonesia\",\n    \"website\": \"https://deni.dev\",\n    \"github_url\": \"https://github.com/denisuryadi\",\n    \"linkedin_url\": \"https://linkedin.com/in/denisuryadi\",\n    \"twitter_url\": \"https://twitter.com/denisuryadi\",\n    \"instagram_url\": \"https://instagram.com/denisuryadi\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["profile"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories"]
+						}
+					}
+				},
+				{
+					"name": "Get Category By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Category\",\n    \"description\": \"Description for new category\",\n    \"slug\": \"new-category\",\n    \"icon\": \"code\",\n    \"icon_color\": \"bg-blue-500/10 text-blue-500\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories"]
+						}
+					}
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Category\",\n    \"description\": \"Updated description\",\n    \"slug\": \"updated-category\",\n    \"icon\": \"devices\",\n    \"icon_color\": \"bg-green-500/10 text-green-500\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Skills",
+			"item": [
+				{
+					"name": "Get All Skills",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/skills",
+							"host": ["{{baseUrl}}"],
+							"path": ["skills"]
+						}
+					}
+				},
+				{
+					"name": "Get Skill By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/skills/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["skills", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Skill",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"React.js\",\n    \"type\": \"Framework\",\n    \"category_id\": 1,\n    \"proficiency\": 90\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/skills",
+							"host": ["{{baseUrl}}"],
+							"path": ["skills"]
+						}
+					}
+				},
+				{
+					"name": "Update Skill",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"React.js\",\n    \"type\": \"Framework\",\n    \"category_id\": 1,\n    \"proficiency\": 95\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/skills/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["skills", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Skill",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/skills/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["skills", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": ["{{baseUrl}}"],
+							"path": ["projects"]
+						}
+					}
+				},
+				{
+					"name": "Get Project By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"slug\": \"my-new-project\",\n    \"title\": \"My New Project\",\n    \"description\": \"Short description of the project\",\n    \"long_description\": \"<p>Detailed description of the project</p>\",\n    \"image\": \"/uploads/projects/project.jpg\",\n    \"category\": \"Web App\",\n    \"role\": \"Fullstack Developer\",\n    \"role_details\": \"Led the development team\",\n    \"timeline\": \"3 months\",\n    \"timeline_date\": \"Jan - Mar 2024\",\n    \"live_url\": \"https://myproject.com\",\n    \"github_url\": \"https://github.com/user/project\",\n    \"status\": \"published\",\n    \"tags\": [\"React\", \"Node.js\", \"MySQL\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": ["{{baseUrl}}"],
+							"path": ["projects"]
+						}
+					}
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"slug\": \"updated-project\",\n    \"title\": \"Updated Project\",\n    \"description\": \"Updated description\",\n    \"long_description\": \"<p>Updated detailed description</p>\",\n    \"category\": \"Web App, API\",\n    \"status\": \"published\",\n    \"tags\": [\"React\", \"Node.js\", \"PostgreSQL\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["projects", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Certificates",
+			"item": [
+				{
+					"name": "Get All Certificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/certificates",
+							"host": ["{{baseUrl}}"],
+							"path": ["certificates"]
+						}
+					}
+				},
+				{
+					"name": "Get Certificate By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/certificates/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["certificates", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Certificate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"AWS Certified Developer\",\n    \"level\": \"Associate\",\n    \"issuer\": \"Amazon Web Services\",\n    \"issue_date\": \"2024-01-15\",\n    \"expiry_date\": \"2027-01-15\",\n    \"credential_url\": \"https://aws.amazon.com/verify/abc123\",\n    \"logo_type\": \"aws\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/certificates",
+							"host": ["{{baseUrl}}"],
+							"path": ["certificates"]
+						}
+					}
+				},
+				{
+					"name": "Update Certificate",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"AWS Certified Developer\",\n    \"level\": \"Professional\",\n    \"issuer\": \"Amazon Web Services\",\n    \"issue_date\": \"2024-01-15\",\n    \"expiry_date\": \"2027-01-15\",\n    \"credential_url\": \"https://aws.amazon.com/verify/abc123\",\n    \"logo_type\": \"aws\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/certificates/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["certificates", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Certificate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/certificates/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["certificates", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Work History",
+			"item": [
+				{
+					"name": "Get All Work History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/work-history",
+							"host": ["{{baseUrl}}"],
+							"path": ["work-history"]
+						}
+					}
+				},
+				{
+					"name": "Get Work History By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/work-history/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["work-history", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Work History",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"Tech Company\",\n    \"position\": \"Senior Developer\",\n    \"location\": \"Jakarta, Indonesia\",\n    \"start_date\": \"2022-01-01\",\n    \"end_date\": null,\n    \"is_current\": true,\n    \"description\": \"<p>Leading development team...</p>\",\n    \"achievements\": [\"Increased performance by 50%\", \"Led team of 5 developers\"],\n    \"technologies\": [\"React\", \"Node.js\", \"PostgreSQL\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/work-history",
+							"host": ["{{baseUrl}}"],
+							"path": ["work-history"]
+						}
+					}
+				},
+				{
+					"name": "Update Work History",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"Tech Company\",\n    \"position\": \"Lead Developer\",\n    \"location\": \"Jakarta, Indonesia\",\n    \"start_date\": \"2022-01-01\",\n    \"end_date\": \"2024-01-01\",\n    \"is_current\": false,\n    \"description\": \"<p>Updated description...</p>\",\n    \"achievements\": [\"Led major project\"],\n    \"technologies\": [\"React\", \"Node.js\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/work-history/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["work-history", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Work History",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/work-history/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["work-history", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "Get All Contacts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contacts",
+							"host": ["{{baseUrl}}"],
+							"path": ["contacts"]
+						}
+					}
+				},
+				{
+					"name": "Get Contact By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contacts/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["contacts", "1"]
+						}
+					}
+				},
+				{
+					"name": "Toggle Read Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_read\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/contacts/1/read",
+							"host": ["{{baseUrl}}"],
+							"path": ["contacts", "1", "read"]
+						}
+					}
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/contacts/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["contacts", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Upload",
+			"item": [
+				{
+					"name": "Upload Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/upload/image",
+							"host": ["{{baseUrl}}"],
+							"path": ["upload", "image"]
+						}
+					}
+				},
+				{
+					"name": "Upload Document",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "document",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/upload/document",
+							"host": ["{{baseUrl}}"],
+							"path": ["upload", "document"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
