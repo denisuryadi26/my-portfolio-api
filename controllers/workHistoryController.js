@@ -7,9 +7,43 @@ exports.getAll = async (req, res) => {
             'SELECT * FROM work_history ORDER BY is_current DESC, start_date DESC'
         );
 
+        // Map role to position for frontend compatibility
+        const mappedJobs = jobs.map(job => {
+            let achievements = [];
+            let technologies = [];
+
+            // Safely parse JSON fields
+            try {
+                if (job.achievements) {
+                    achievements = typeof job.achievements === 'string'
+                        ? JSON.parse(job.achievements)
+                        : job.achievements;
+                }
+            } catch (e) {
+                achievements = [];
+            }
+
+            try {
+                if (job.technologies) {
+                    technologies = typeof job.technologies === 'string'
+                        ? JSON.parse(job.technologies)
+                        : job.technologies;
+                }
+            } catch (e) {
+                technologies = [];
+            }
+
+            return {
+                ...job,
+                position: job.role, // Alias for frontend
+                achievements,
+                technologies
+            };
+        });
+
         res.json({
             success: true,
-            data: jobs
+            data: mappedJobs
         });
     } catch (error) {
         console.error('Get work history error:', error);
@@ -36,9 +70,39 @@ exports.getOne = async (req, res) => {
             });
         }
 
+        let achievements = [];
+        let technologies = [];
+
+        try {
+            if (jobs[0].achievements) {
+                achievements = typeof jobs[0].achievements === 'string'
+                    ? JSON.parse(jobs[0].achievements)
+                    : jobs[0].achievements;
+            }
+        } catch (e) {
+            achievements = [];
+        }
+
+        try {
+            if (jobs[0].technologies) {
+                technologies = typeof jobs[0].technologies === 'string'
+                    ? JSON.parse(jobs[0].technologies)
+                    : jobs[0].technologies;
+            }
+        } catch (e) {
+            technologies = [];
+        }
+
+        const job = {
+            ...jobs[0],
+            position: jobs[0].role,
+            achievements,
+            technologies
+        };
+
         res.json({
             success: true,
-            data: jobs[0]
+            data: job
         });
     } catch (error) {
         console.error('Get job error:', error);
@@ -52,12 +116,28 @@ exports.getOne = async (req, res) => {
 // Create job
 exports.create = async (req, res) => {
     try {
-        const { company, role, location, start_date, end_date, is_current, description } = req.body;
+        const {
+            company,
+            role,
+            position, // Accept both role and position
+            location,
+            start_date,
+            end_date,
+            is_current,
+            description,
+            achievements,
+            technologies
+        } = req.body;
+
+        // Use position if role is not provided (frontend sends position)
+        const jobRole = role || position || '';
+        const jobAchievements = achievements && achievements.length > 0 ? JSON.stringify(achievements) : null;
+        const jobTechnologies = technologies && technologies.length > 0 ? JSON.stringify(technologies) : null;
 
         const [result] = await db.execute(
-            `INSERT INTO work_history (company, role, location, start_date, end_date, is_current, description)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [company, role, location, start_date, end_date, is_current || false, description]
+            `INSERT INTO work_history (company, role, location, start_date, end_date, is_current, description, achievements, technologies)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [company, jobRole, location, start_date, end_date, is_current || false, description, jobAchievements, jobTechnologies]
         );
 
         res.status(201).json({
@@ -78,12 +158,27 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { company, role, location, start_date, end_date, is_current, description } = req.body;
+        const {
+            company,
+            role,
+            position,
+            location,
+            start_date,
+            end_date,
+            is_current,
+            description,
+            achievements,
+            technologies
+        } = req.body;
+
+        const jobRole = role || position || '';
+        const jobAchievements = achievements && achievements.length > 0 ? JSON.stringify(achievements) : null;
+        const jobTechnologies = technologies && technologies.length > 0 ? JSON.stringify(technologies) : null;
 
         await db.execute(
             `UPDATE work_history SET company = ?, role = ?, location = ?, start_date = ?,
-             end_date = ?, is_current = ?, description = ? WHERE id = ?`,
-            [company, role, location, start_date, end_date, is_current, description, id]
+             end_date = ?, is_current = ?, description = ?, achievements = ?, technologies = ? WHERE id = ?`,
+            [company, jobRole, location, start_date, end_date, is_current, description, jobAchievements, jobTechnologies, id]
         );
 
         res.json({

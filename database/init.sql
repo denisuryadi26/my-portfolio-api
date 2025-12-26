@@ -86,6 +86,8 @@ CREATE TABLE IF NOT EXISTS work_history (
     end_date VARCHAR(50),
     is_current BOOLEAN DEFAULT FALSE,
     description TEXT,
+    achievements JSON,
+    technologies JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

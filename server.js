@@ -14,6 +14,7 @@ const profileRoutes = require('./routes/profile');
 const contactRoutes = require('./routes/contacts');
 const dashboardRoutes = require('./routes/dashboard');
 const uploadRoutes = require('./routes/upload');
+const publicRoutes = require('./routes/public');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,7 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 // Static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// API Routes
+// Public API Routes (no auth required)
+app.use('/api/public', publicRoutes);
+
+// Protected API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/skills', skillRoutes);
