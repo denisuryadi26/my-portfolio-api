@@ -57,6 +57,19 @@ exports.getLandingData = async (req, res) => {
             LIMIT 6
         `);
 
+        // Get distinct project categories for filters
+        const [projectCategoriesRaw] = await db.execute(`
+            SELECT DISTINCT category FROM projects
+            WHERE status = 'published' AND category IS NOT NULL AND category != ''
+        `);
+
+        // Split comma-separated categories and get unique values
+        const allCategories = projectCategoriesRaw
+            .map(c => c.category)
+            .flatMap(cat => cat.split(',').map(c => c.trim()))
+            .filter(c => c);
+        const uniqueCategories = [...new Set(allCategories)].sort();
+
         res.json({
             success: true,
             data: {
@@ -64,7 +77,8 @@ exports.getLandingData = async (req, res) => {
                 projects: formattedProjects,
                 skills: skillsByCategory,
                 workHistory,
-                certificates
+                certificates,
+                projectCategories: uniqueCategories
             }
         });
     } catch (error) {
